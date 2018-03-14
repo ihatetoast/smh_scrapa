@@ -12,17 +12,23 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+//ROUTES! 
+const routes = require('./routes');
+
 const hbs = require('express-handlebars');
 
 const mongoose = require('mongoose');
 //cheerio and axios required in the scraper.js
 
+//set PORT that's Heroku ready, Freddy
+const PORT = process.env.PORT || 3000;
 
 //fire up express
 const app = express();
 
 //set up my babydase:
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/scraperdb';
+
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {});
 
@@ -36,8 +42,12 @@ mongoose.connect(MONGODB_URI, {});
 var db = mongoose.connection;
 
 //handlebars templating engine
-app.engine('hbs',  hbs({extname: 'hbs',defaultLayout:'main',layoutsDir: __dirname + '/views/layouts/'}));
-//path to layout:
+app.engine('hbs',  hbs({
+  extname: 'hbs', 
+  defaultLayout:'main',
+  layoutsDir: __dirname + '/views/layouts/'
+}));
+//path to layout/views dir:
 app.set('views', path.join(__dirname, 'views'));
 //make it so
 app.set('view engine', 'hbs');
@@ -54,13 +64,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//ROUTES! 
-const routes = require('./routes')
-
-//set PORT that's Heroku ready, Freddy
-const PORT = process.env.PORT || 3000;
-
-
+// app.use('/', routes);
 
 
 
